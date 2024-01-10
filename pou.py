@@ -18,6 +18,7 @@ class Pou:
         self.happiness = random.randint(50,100)
         self.health = 100
         self.alive = True
+        self.sleep_count = 0
 
     def status(self):
         print("Name:", self.name)
@@ -34,19 +35,33 @@ class Pou:
         self.hunger = minmax(self.hunger + random.randint(5, 10))
         self.energy = minmax(self.energy - random.randint(20, 30))
         self.happiness = minmax(self.happiness + random.randint(5, 10))
-        self.health = minmax(self.health + random.randint(0, 5))
+        self.health = minmax(self.health - random.randint(50, 60))
+        self.check_health()
 
     def eat(self):
         self.hunger = minmax(self.hunger - random.randint(5, 10))
         self.energy = minmax(self.energy + random.randint(20, 20))
         self.happiness = minmax(self.happiness + random.randint(5, 10))
         self.health = minmax(self.health + random.randint(0, 5))
+        self.check_health()
 
     def sleep(self):
         self.hunger = minmax(self.hunger + random.randint(5, 10))
         self.energy = minmax(self.energy + random.randint(30, 60))
         self.happiness = minmax(self.happiness + random.randint(0, 3))
         self.health = minmax(self.health + random.randint(0, 5))
+        self.sleep_count += 1
+        self.check_health()
+    
+    def pass_time(self):
+        if self.sleep_count == 7:
+            self.age += 1
+            self.sleep_count = 0
+
+    def check_health(self):
+        if self.health <= 0:
+            print(f"{self.name} has died. Game over.")
+            self.alive = False
 
 toto = Pou("Toto")
 
@@ -62,3 +77,5 @@ while True:
         toto.sleep()
     else:
         break
+    toto.pass_time()
+    print("A day has passed.\n")
